@@ -6,6 +6,7 @@ import com.springredditclone.redditclone.dao.entities.VerificationToken;
 import com.springredditclone.redditclone.dao.repository.UserRepository;
 import com.springredditclone.redditclone.dao.repository.VerificationRepository;
 import com.springredditclone.redditclone.dto.RegisterRequest;
+import com.springredditclone.redditclone.exceptions.SpringRedditException;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.Instant;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -61,4 +63,19 @@ public class AuthService {
 
     }
 
+    public void verifyAccount(String token) {
+
+        Optional<VerificationToken> verficationToken = verificationRepository.findByToken(token);
+        fetchUserAndEnable(verficationToken.orElseThrow(()-> new SpringRedditException("Invalid Token" )));
+    }
+
+    @Transactional
+    private void fetchUserAndEnable(VerificationToken verificationToken) {
+        Long userId = verificationToken.getUser().getUserId();
+
+        User user = userRepository.findById(userId).orElseThrow(() -> new SpringRedditException("User Not Found with name - "));
+         user.setEnabled(true);
+         userRepository.save(user);
+
+    }
 }
