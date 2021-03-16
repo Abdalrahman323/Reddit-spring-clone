@@ -9,7 +9,7 @@ import com.springredditclone.redditclone.dto.AuthenticationResponse;
 import com.springredditclone.redditclone.dto.LoginRequest;
 import com.springredditclone.redditclone.dto.RegisterRequest;
 import com.springredditclone.redditclone.exceptions.SpringRedditException;
-import com.springredditclone.redditclone.security.JwtProvider;
+import com.springredditclone.redditclone.security.TokenUtils;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -33,7 +33,7 @@ public class AuthService {
     private final VerificationRepository verificationRepository;
     private final MailService mailService;
     private final AuthenticationManager authenticationManager;
-    private final JwtProvider jwtProvider;
+    private final TokenUtils tokenUtils;
 
     @Transactional
     public void singUp (RegisterRequest registerRequest){
@@ -92,7 +92,7 @@ public class AuthService {
         );
 
         SecurityContextHolder.getContext().setAuthentication(authenticate);
-        String token = jwtProvider.generateToken(authenticate);
+        String token = tokenUtils.generateToken(authenticate);
 
         return new AuthenticationResponse(token,loginRequest.getUsername());
 
