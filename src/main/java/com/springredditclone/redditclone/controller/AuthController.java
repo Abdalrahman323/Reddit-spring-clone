@@ -1,13 +1,12 @@
 package com.springredditclone.redditclone.controller;
 
+import com.springredditclone.redditclone.dto.AuthenticationResponse;
+import com.springredditclone.redditclone.dto.LoginRequest;
 import com.springredditclone.redditclone.dto.RegisterRequest;
 import com.springredditclone.redditclone.service.AuthService;
 import lombok.AllArgsConstructor;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -24,11 +23,17 @@ public class AuthController {
         return new ResponseEntity<>("user Registration successfully", HttpStatus.OK);
     }
 
-      @GetMapping("/accountVerfication/{token}")
+    @GetMapping("/accountVerfication/{token}")
         public ResponseEntity<String> verifyAccount(@PathVariable String token){
           authService.verifyAccount(token);
 
           return new ResponseEntity<>("Account Activated successfully",HttpStatus.OK);
         }
 
+    @PostMapping("/login")
+    public AuthenticationResponse login (@RequestBody LoginRequest loginRequest){
+
+        return authService.login(loginRequest);
+
+    }
 }
