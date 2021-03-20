@@ -15,6 +15,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -56,6 +57,12 @@ public class AuthService {
                "http://localhost:8080/api/auth/accountVerfication/" + token));
     }
 
+    @Transactional
+    public User getCurrentUser(){
+        org.springframework.security.core.userdetails.User principle = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return  userRepository.findByUsername(principle.getUsername())
+                .orElseThrow(()-> new UsernameNotFoundException("User name not found - "+ principle.getUsername()));
+    }
 
     private  String generateVerficationToken(User user){
         String generatedToken = UUID.randomUUID().toString();

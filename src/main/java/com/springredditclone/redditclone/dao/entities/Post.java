@@ -20,7 +20,7 @@ public class Post {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private  long postID;
+    private  long postId;
 
     @NotBlank(message = "post name cann't be empty or null")
     private String postName;
