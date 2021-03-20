@@ -3,6 +3,8 @@ package com.springredditclone.redditclone.service;
 import com.springredditclone.redditclone.dao.entities.Subreddit;
 import com.springredditclone.redditclone.dao.repository.SubredditRepository;
 import com.springredditclone.redditclone.dto.SubredditDTO;
+import com.springredditclone.redditclone.exceptions.SpringRedditException;
+import com.springredditclone.redditclone.mapper.SubredditMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,10 +18,11 @@ public class SubredditService {
 
 
     final private SubredditRepository subredditRepository;
+    final private SubredditMapper subredditMapper;
 
     @Transactional
     public SubredditDTO save(SubredditDTO subredditDTO){
-        Subreddit savedSubreddit = subredditRepository.save(mapSubredditDto(subredditDTO));
+        Subreddit savedSubreddit = subredditRepository.save(subredditMapper.mapDtoToSubreddit(subredditDTO));
         subredditDTO.setId(savedSubreddit.getId());
 
         return subredditDTO;
@@ -30,23 +33,30 @@ public class SubredditService {
 
         return subredditRepository.findAll()
                 .stream()
-                .map(this::maptoDTO)
+                .map(subredditMapper::mapSubredditToDto)
                 .collect(Collectors.toList());
     }
 
-    private SubredditDTO maptoDTO(Subreddit subreddit) {
-        return SubredditDTO.builder().name(subreddit.getName())
-                .description(subreddit.getDescription())
-                .id(subreddit.getId())
-                .build();
+    public SubredditDTO getSubreddit(long id) {
+         Subreddit subreddit = subredditRepository.findById(id)
+                 .orElseThrow(()-> new SpringRedditException("No subreddit found with id = "+id));
+         return subredditMapper.mapSubredditToDto(subreddit);
     }
 
-    private Subreddit mapSubredditDto(SubredditDTO subredditDTO) {
-        // use the buider pattern to construct our subreddit entity
-        return Subreddit.builder().name(subredditDTO.getName())
-                .description(subredditDTO.getDescription())
-                .build();
-    }
+//    Old Mapping way
+//    private SubredditDTO maptoDTO(Subreddit subreddit) {
+//        return SubredditDTO.builder().name(subreddit.getName())
+//                .description(subreddit.getDescription())
+//                .id(subreddit.getId())
+//                .build();
+//    }
+//
+//    private Subreddit mapSubredditDto(SubredditDTO subredditDTO) {
+//        // use the buider pattern to construct our subreddit entity
+//        return Subreddit.builder().name(subredditDTO.getName())
+//                .description(subredditDTO.getDescription())
+//                .build();
+//    }
 
 
 }
