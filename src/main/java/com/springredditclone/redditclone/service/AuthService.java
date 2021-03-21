@@ -59,7 +59,8 @@ public class AuthService {
 
     @Transactional
     public User getCurrentUser(){
-        org.springframework.security.core.userdetails.User principle = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        org.springframework.security.core.userdetails.User principle = (org.springframework.security.core.userdetails.User)
+                SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return  userRepository.findByUsername(principle.getUsername())
                 .orElseThrow(()-> new UsernameNotFoundException("User name not found - "+ principle.getUsername()));
     }

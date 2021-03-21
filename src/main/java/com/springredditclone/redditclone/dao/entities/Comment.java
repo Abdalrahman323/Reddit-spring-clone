@@ -26,7 +26,7 @@ public class Comment {
     @JoinColumn(name = "postId")
     private Post post;
 
-    private Instant CreatedDate;
+    private Instant createdDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId")
