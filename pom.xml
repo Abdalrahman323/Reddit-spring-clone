@@ -49,11 +49,10 @@
 			<scope>provided</scope>
 		</dependency>
 
-		<!-- https://mvnrepository.com/artifact/com.github.marlonlom/timeago -->
 		<dependency>
-			<groupId>com.github.marlonlom</groupId>
-			<artifactId>timeago</artifactId>
-			<version>4.0.3</version>
+			<groupId>org.ocpsoft.prettytime</groupId>
+			<artifactId>prettytime</artifactId>
+			<version>5.0.0.Final</version>
 		</dependency>
 		<dependency>
 			<groupId>javax.validation</groupId>

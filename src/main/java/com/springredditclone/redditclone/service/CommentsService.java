@@ -22,7 +22,6 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class CommentsService {
 
-    //TODO: Construct POST URL
     private static final String POST_URL = "http://localhost:8080/api/posts/";
     private  final PostRepository postRepository;
     private  final UserRepository userRepository;
